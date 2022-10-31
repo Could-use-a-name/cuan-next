@@ -29,7 +29,7 @@ export default async function Posts() {
       </p>
 
       <div className="flex flex-column py-8">
-        {posts.map((post, index) => (
+        {posts.map((post: any, index: number) => (
           <Link key={index} href={`/posts/${post.slug.current}`} className="w-full">
             <div className="flex flex-row items-center gap-2 w-full">
               <Image

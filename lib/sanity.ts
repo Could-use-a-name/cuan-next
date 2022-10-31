@@ -10,6 +10,6 @@ export const client = sanityClient({
 
 const sanityImageBuilder = imageUrlBuilder(client);
 
-export function sanityImage(source) {
+export function sanityImage(source: any) {
   return sanityImageBuilder.image(source);
 }

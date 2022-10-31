@@ -25,7 +25,15 @@ async function getPost(slug: string) {
   return post;
 }
 
-export default async function Post({ params }) {
+export async function generateStaticParams() {
+  const posts = await client.fetch<[{slug: {current: string}}]>('*[_type == "post"]{slug}');
+
+  return posts.map((post: {slug: {current: string}}) => ({
+    slug: post.slug.current,
+  }));
+}
+
+export default async function Post({ params }: any) {
   const post = await getPost(params.slug);
   const date = new Date(post.publishedAt);
   return (
@@ -62,3 +70,5 @@ export default async function Post({ params }) {
     </main>
   )
 }
+
+

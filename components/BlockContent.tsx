@@ -12,7 +12,7 @@ const portabletextComponents: PortableTextComponents = {
   }
 }
 
-export function Content({blocks}) {
+export function Content({blocks}: any) {
   return (
     <PortableText value={blocks} components={portabletextComponents} />
   )
