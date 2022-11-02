@@ -1,6 +1,25 @@
+import { toHTML } from '@portabletext/to-html';
 import { client, sanityImage } from '../../../lib/sanity';
 import Image from 'next/image';
-import { Content } from '../../../components/BlockContent';
+
+import type { PortableTextComponents } from '@portabletext/to-html';
+
+const portabletextComponents: PortableTextComponents = {
+  block: {
+    'h1': (props) => {
+      return `<h1 class="py-4 text-3xl">${props.children}</h1>`;
+    },
+    'h2': (props) => {
+      return `<h2 class="py-2 text-2xl">${props.children}</h1>`;
+    },
+    'h3': (props) => {
+      return `<h3 class="py-1 text-xl">${props.children}</h1>`;
+    },
+    'normal': (props) => {
+      return `<p class="text-base">${props.children}</h1>`;
+    },
+  }
+}
 
 async function getPost(slug: string) {
   const query = `*[_type == "post" && slug.current == $slug][0]{
@@ -36,6 +55,7 @@ export async function generateStaticParams() {
 export default async function Post({ params }: any) {
   const post = await getPost(params.slug);
   const date = new Date(post.publishedAt);
+
   return (
     <main className="p-4 mx-auto max-w-5xl">
       <div className="flex flex-col md:flex-row pt-8">
@@ -64,8 +84,7 @@ export default async function Post({ params }: any) {
           <span className="text-xs">{date.toLocaleString()}</span>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <Content blocks={post.body} />
+      <div className="flex flex-col gap-2" dangerouslySetInnerHTML={{__html: toHTML(post.body, {components: portabletextComponents})}}>
       </div>
     </main>
   )
